@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>redis-demo</h1>
+    <h1 style="color:rgba(36,93,183,1)">redis-demo</h1>
     <div>
         <h3><small>High Scores</small></h3>
         <table class="table table-striped table-condensed">

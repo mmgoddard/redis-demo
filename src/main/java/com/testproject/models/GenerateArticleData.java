@@ -1,9 +1,11 @@
 package com.testproject.models;
 
+import org.joda.time.DateTime;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import javax.print.DocFlavor;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -33,7 +35,7 @@ public class GenerateArticleData {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             for(int i = 0; i < 99; i++) {
-                String number = generateNumber();
+                String number = String.valueOf(new DateTime().getMillis());
                 jedis.lpush("articles", number);
                 jedis.hset("hashedArticles", number, generateTitle(i));
             }

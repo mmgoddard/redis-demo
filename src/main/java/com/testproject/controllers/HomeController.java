@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Response;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -47,12 +49,14 @@ public class HomeController {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             List elements = jedis.lrange("articles", 0, 99);
-            HashMap<String, String> values = new HashMap<String, String>();
+            HashMap<String, Response<String>> values = new HashMap<String, Response<String>>();
+            Pipeline pipe = jedis.pipelined();
             for(int i = 0; i < elements.size(); i++) {
-                String ele = jedis.hget("hashedArticles", elements.get(i).toString());
-                values.put(elements.get(i).toString(), ele);
-                System.out.println("Name: "+elements.get(i).toString()+":: Value: "+ele);
+                Response<String> element = pipe.hget("hashedArticles", elements.get(i).toString());
+                values.put(elements.get(i).toString(), element);
             }
+
+            pipe.sync();
             jedis.close();
             model.addAttribute("values", values);
         } catch (JedisConnectionException e) {

@@ -18,7 +18,6 @@
     <div style="margin-left:20px">
         <a href="/scores"><p>Scores</p></a>
         <a href="/articles"><p>Articles</p></a>
-        <a href="/visitors"><p>Visitors</p></a>
     </div>
 </div>
 

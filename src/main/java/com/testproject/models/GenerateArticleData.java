@@ -5,10 +5,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import javax.print.DocFlavor;
-import java.util.Date;
-import java.util.Random;
-
 /**
  * Created by Mark on 30/10/14.
  */
@@ -24,9 +20,11 @@ public class GenerateArticleData {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             Pipeline pipe = jedis.pipelined();
-            DateTime date = new DateTime();
+
             for(int i = 0; i < 99; i++) {
-                String number = String.valueOf(date.plusMillis(i));
+                DateTime date = new DateTime();
+                date = date.plusMinutes(i);
+                String number = String.valueOf(date.getMillis());
                 pipe.lpush("articles", number);
                 pipe.hset("hashedArticles", number, generateTitle(i));
                 pipe.ltrim("articles", 0, 99);

@@ -22,13 +22,16 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>Date</th>
                 <th>Article Name</th>
             </tr>
             </thead>
             <tbody>
             <%int i = 1; %>
             <c:forEach items="${list}" var="item">
+            <%
+                DateTime date = new DateTime
+            %>
                 <tr>
                     <td><%=i%></td>
                     <td>${item}</td>

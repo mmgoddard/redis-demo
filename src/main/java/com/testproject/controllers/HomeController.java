@@ -2,6 +2,7 @@ package com.testproject.controllers;
 
 import com.testproject.models.GenerateArticleData;
 import com.testproject.models.GenerateScoreData;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,24 +51,23 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/articles")
     private ModelAndView serveArticles(Model model) {
-        GenerateArticleData fuck = new GenerateArticleData();
-                fuck.sendData();
-//        try {
-//            Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
-//            List elements = jedis.lrange("articles", 0, 99);
-//            HashMap<String, Response<String>> values = new HashMap<String, Response<String>>();
-//            Pipeline pipe = jedis.pipelined();
-//            for (int i = 0; i < elements.size(); i++) {
-//                Response<String> element = pipe.hget("hashedArticles", elements.get(i).toString());
-//                values.put(elements.get(i).toString(), element);
-//            }
-//            pipe.sync();
-//            jedis.close();
-//            model.addAttribute("values", values);
-//            model.addAttribute("list", elements);
-//        } catch (JedisConnectionException e) {
-//            e.printStackTrace();
-//        }
+        GenerateArticleData.sendData();
+        try {
+            Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
+            List elements = jedis.lrange("articles", 0, 99);
+            HashMap<String, Response<String>> values = new HashMap<String, Response<String>>();
+            Pipeline pipe = jedis.pipelined();
+            for (int i = 0; i < elements.size(); i++) {
+                Response<String> element = pipe.hget("hashedArticles", elements.get(i).toString());
+                values.put(elements.get(i).toString(), element);
+            }
+            pipe.sync();
+            jedis.close();
+            model.addAttribute("values", values);
+            model.addAttribute("list", elements);
+        } catch (JedisConnectionException e) {
+            e.printStackTrace();
+        }
         return new ModelAndView("Articles");
     }
 
@@ -82,11 +82,13 @@ public class HomeController {
         System.out.print(articleName);
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
-            GenerateArticleData gad = new GenerateArticleData();
-            String number = gad.generateNumber();
-            jedis.lpush("articles", number);
-            jedis.hset("hashedArticles", number, articleName);
-
+            Pipeline pipe = jedis.pipelined();
+            //GenerateArticleData gad = new GenerateArticleData();
+            String number = String.valueOf(new DateTime().getMillis());
+            pipe.lpush("articles", number);
+            pipe.hset("hashedArticles", number, articleName);
+            pipe.ltrim("articles", 0, 99);
+            pipe.sync();
             jedis.close();
         } catch (JedisConnectionException e) {
             e.printStackTrace();

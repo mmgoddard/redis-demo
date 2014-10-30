@@ -1,3 +1,9 @@
+<%@ page import="org.joda.time.DateTime" %>
+<%@ page import="org.joda.time.format.DateTimeFormat" %>
+<%@ page import="org.joda.time.format.DateTimeFormatter" %>
+<%@ page import="redis.clients.jedis.Response" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -27,16 +33,19 @@
             </tr>
             </thead>
             <tbody>
-            <%int i = 1; %>
-            <c:forEach items="${list}" var="item">
-            <%
-                DateTime date = new DateTime
+            <%int i = 1;
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("kk:mm:ss dd/MM/yy");
             %>
+            <c:set var="j" value="0" scope="page"/>
+            <c:set var="j" value="${count + 1}" scope="page" />
+            <c:forEach items="${list}" var="item">
+
                 <tr>
                     <td><%=i%></td>
-                    <td>${item}</td>
+                    <td>${formattedList.get(j)}</td>
                     <td>${values.get(item).get()}</td>
                         <% i++; %>
+                </tr>
             </c:forEach>
             </tbody>
         </table>

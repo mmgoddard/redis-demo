@@ -1,11 +1,11 @@
 package com.testproject.controllers;
 
 import com.testproject.models.GenerateArticleData;
-import com.testproject.models.GenerateScoreData;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +18,8 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +51,9 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/articles")
     private ModelAndView serveArticles(Model model) {
+        /*
+         * SEND NEW DATA TO REDIS!
+         */
         GenerateArticleData.sendData();
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
@@ -64,6 +67,7 @@ public class HomeController {
             pipe.sync();
             jedis.close();
             model.addAttribute("values", values);
+            model.addAttribute("formattedList", formatDates(elements));
             model.addAttribute("list", elements);
         } catch (JedisConnectionException e) {
             e.printStackTrace();
@@ -83,7 +87,6 @@ public class HomeController {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             Pipeline pipe = jedis.pipelined();
-            //GenerateArticleData gad = new GenerateArticleData();
             String number = String.valueOf(new DateTime().getMillis());
             pipe.lpush("articles", number);
             pipe.hset("hashedArticles", number, articleName);
@@ -94,5 +97,15 @@ public class HomeController {
             e.printStackTrace();
         }
         return new ModelAndView("redirect:articles");
+    }
+
+    private List<String> formatDates(List<String> oldList) {
+        List<String> newList = new LinkedList<String>();
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("kk:mm:ss dd/MM/yy");
+        for(int i = 0; i < oldList.size(); i++) {
+            String date = fmt.print(new DateTime(Long.valueOf(oldList.get(i))));
+            newList.add(i, date);
+        }
+        return newList;
     }
 }

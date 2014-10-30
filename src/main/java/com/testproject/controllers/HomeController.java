@@ -1,5 +1,7 @@
 package com.testproject.controllers;
 
+import com.testproject.models.GenerateArticleData;
+import com.testproject.models.GenerateScoreData;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -39,6 +44,20 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, value="/articles")
     private ModelAndView serveArticles(Model model) {
+        try {
+            Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
+            List elements = jedis.lrange("articles", 0, 99);
+            HashMap<String, String> values = new HashMap<String, String>();
+            for(int i = 0; i < elements.size(); i++) {
+                String ele = jedis.hget("hashedArticles", elements.get(i).toString());
+                values.put(elements.get(i).toString(), ele);
+                System.out.println("Name: "+elements.get(i).toString()+":: Value: "+ele);
+            }
+            jedis.close();
+            model.addAttribute("values", values);
+        } catch (JedisConnectionException e) {
+            e.printStackTrace();
+        }
         return new ModelAndView("Articles");
     }
 

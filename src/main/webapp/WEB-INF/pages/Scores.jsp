@@ -12,6 +12,15 @@
     <h1 style="color:rgba(36,93,183,1)">redis-demo</h1>
     <div>
         <h3><small>High Scores</small></h3>
+        <form class="form-inline" action="/searchScores" method="post">
+            <div class="form-group">
+                <label for="search">Search: </label>
+                <input type="form-control" id="search" name="search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <p>${rank.get()}</p>
+        <p>${score.get()}</p>
         <table class="table table-striped table-condensed">
             <thead>
             <tr>

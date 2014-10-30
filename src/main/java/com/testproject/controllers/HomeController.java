@@ -83,7 +83,6 @@ public class HomeController {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             Pipeline pipe = jedis.pipelined();
-            //GenerateArticleData gad = new GenerateArticleData();
             String number = String.valueOf(new DateTime().getMillis());
             pipe.lpush("articles", number);
             pipe.hset("hashedArticles", number, articleName);
@@ -94,5 +93,24 @@ public class HomeController {
             e.printStackTrace();
         }
         return new ModelAndView("redirect:articles");
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/searchScores")
+    private ModelAndView searchScores(HttpServletRequest request, HttpServletResponse response, Model model) {
+        String name = request.getParameter("search");
+        try {
+            Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
+            Pipeline pipe = jedis.pipelined();
+            Response<Long> rank = pipe.zrevrank("highscores", name);
+            Response<Double> score = pipe.zscore("highscores", name);
+            pipe.sync();
+            jedis.close();
+            model.addAttribute("rank",rank.get()+1);
+            model.addAttribute("score", score.get());
+            System.out.println("rank: "+rank.get()+" score: "+score.get());
+        } catch (JedisConnectionException e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView("Search");
     }
 }

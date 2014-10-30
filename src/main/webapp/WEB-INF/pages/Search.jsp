@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Mark
-  Date: 30/10/14
-  Time: 12:09
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,10 +8,8 @@
 <body>
 <div class="container">
     <h1 style="color:rgba(36,93,183,1)">redis-demo</h1>
-</div>
-
-<div class="footer container">
-    <p style="text-align: center">by Mark Goddard & Tom Butterwith</p>
+    <p>Your Rank: ${rank}</p>
+    <p>Your Score: ${score}</p>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"/>

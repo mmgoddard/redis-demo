@@ -37,7 +37,6 @@
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("kk:mm:ss dd/MM/yy");
             %>
             <c:set var="j" value="0" scope="page"/>
-            <c:set var="j" value="${count + 1}" scope="page" />
             <c:forEach items="${list}" var="item">
 
                 <tr>
@@ -45,6 +44,7 @@
                     <td>${formattedList.get(j)}</td>
                     <td>${values.get(item).get()}</td>
                         <% i++; %>
+                    <c:set var="j" value="${count + 1}" scope="page" />
                 </tr>
             </c:forEach>
             </tbody>

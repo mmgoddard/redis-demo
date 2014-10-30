@@ -1,6 +1,5 @@
 package com.testproject.controllers;
 
-import com.testproject.models.GenerateArticleData;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -54,7 +53,7 @@ public class HomeController {
         /*
          * SEND NEW DATA TO REDIS!
          */
-        GenerateArticleData.sendData();
+        //GenerateArticleData.sendData();
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
             List elements = jedis.lrange("articles", 0, 99);

@@ -16,13 +16,16 @@ import java.util.Set;
 @RequestMapping("/")
 public class HomeController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    private ModelAndView serveAccount(Model model) {
-        //model.addAttribute("name", value);
+    @RequestMapping(method = RequestMethod.GET, value="/")
+    private ModelAndView serveContents(Model model) {
+        return new ModelAndView("Contents");
+    }
 
+    @RequestMapping(method = RequestMethod.GET, value="/scores")
+    private ModelAndView serveScores(Model model) {
         try {
             Jedis jedis = new Jedis("redis-demo1.cloudapp.net");
-            Set<Tuple> elements = jedis.zrevrangeWithScores("highscores", 0, 100);
+            Set<Tuple> elements = jedis.zrevrangeWithScores("highscores", 0, 99);
             jedis.close();
             for (Tuple tuple : elements) {
                 System.out.println("Element: " + tuple.getElement() + " :::: Score: " + tuple.getScore());
@@ -31,6 +34,17 @@ public class HomeController {
         } catch (JedisConnectionException e) {
             e.printStackTrace();
         }
-        return new ModelAndView("Homepage");
+        return new ModelAndView("Scores");
     }
+
+    @RequestMapping(method = RequestMethod.GET, value="/articles")
+    private ModelAndView serveArticles(Model model) {
+        return new ModelAndView("Articles");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/visitors")
+    private ModelAndView serveVisitors(Model model) {
+        return new ModelAndView("Visitors");
+    }
+
 }

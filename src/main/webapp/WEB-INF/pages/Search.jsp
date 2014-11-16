@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Redis Demo</title>
-    <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/resources/css/stylesheet.css" rel="stylesheet"/>
+    <link href="/redis-demo/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/redis-demo/resources/css/stylesheet.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
@@ -13,6 +13,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"/>
-<script src="/resources/bootstrap/js/bootstrap.min.js"/>
+<script src="/redis-demo/resources/bootstrap/js/bootstrap.min.js"/>
 </body>
 </html>

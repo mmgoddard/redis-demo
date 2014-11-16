@@ -9,15 +9,15 @@
 <html>
 <head>
     <title>Redis Demo</title>
-    <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/resources/css/stylesheet.css" rel="stylesheet"/>
+    <link href="/redis-demo/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/redis-demo/resources/css/stylesheet.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
     <h1 style="color:rgba(36,93,183,1)">redis-demo</h1>
     <div style="margin-left:20px">
-        <a href="/scores"><p>Scores</p></a>
-        <a href="/articles"><p>Articles</p></a>
+        <a href="scores"><p>Scores</p></a>
+        <a href="articles"><p>Articles</p></a>
     </div>
 </div>
 
@@ -26,6 +26,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"/>
-<script src="/resources/bootstrap/js/bootstrap.min.js"/>
+<script src="/redis-demo/resources/bootstrap/js/bootstrap.min.js"/>
 </body>
 </html>
